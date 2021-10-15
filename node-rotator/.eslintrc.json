@@ -1,0 +1,10 @@
+{
+  "extends": "./node_modules/gts/",
+  "rules":{
+    "node/no-extraneous-import": ["error", {
+      "allowModules": ["@kubernetes/client-node"],
+      "resolvePaths": [],
+      "tryExtensions": []
+    }]
+  }
+}
