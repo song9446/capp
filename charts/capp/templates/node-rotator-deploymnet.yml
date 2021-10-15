@@ -22,8 +22,8 @@ spec:
         image: {{ .Values.nodeRotator.image.repository }}:{{ .Values.nodeRotator.image.tag }}
         env:
         - name: TARGET_NODE_SELECTOR
-          value: {{ .Values.nodeRotator.targetNodeSelector }}
+          value: {{ .Values.nodeRotator.targetNodeSelector | quote }}
         - name: IN_CLUSTER
           value: "true"
         - name: REPLICAS
-          value: {{ .Values.nodeRotator.replicas }}
+          value: {{ .Values.nodeRotator.replicas | quota }}
