@@ -8,10 +8,9 @@ imagePullSecrets: []
 
 nodeRotator:
   image:
-    repository: nginx
+    repository: song9446/node-rotator
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: ""
+    tag: "0.0.1"
   service:
     type: ClusterIP
     port: 8443

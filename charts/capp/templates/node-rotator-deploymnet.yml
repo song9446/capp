@@ -18,8 +18,5 @@ spec:
       nodeSelector: {{ .Values.nodeRotator.nodeSelector | toJson }}
       {{- end }}
       containers:
-      - name: glider
-        image: nadoo/glider:v0.15.0
-        args: ['-listen', ':8443']
-        ports:
-        - containerPort: 8443
+      - name: rotator
+        image: {{ .Values.nodeRotator.image.repository }}:{{ .Values.nodeRotator.image.tag }}
