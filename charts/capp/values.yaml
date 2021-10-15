@@ -8,6 +8,7 @@ nodeRotator:
   replicas: 1
   serviceAccount:
     create: true
+    name: 
   targetNodeSelector: ''
   image:
     repository: song9446/node-rotator
