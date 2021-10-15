@@ -13,7 +13,7 @@ nodeRotator:
   image:
     repository: song9446/node-rotator
     pullPolicy: IfNotPresent
-    tag: "0.0.2"
+    tag: "0.0.3"
   service:
     type: ClusterIP
     port: 8443
