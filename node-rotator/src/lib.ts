@@ -38,6 +38,9 @@ export class Rotator {
     this.namespace = namespace;
     this.exit = false;
   }
+  dummyPodName(): string {
+    return this.name + '-dummy';
+  }
   async getDummyPods() {
     const rPods = await this.k8sApi.listNamespacedPod(
       this.namespace,
@@ -45,7 +48,7 @@ export class Rotator {
       undefined,
       undefined,
       undefined,
-      `app=${this.name}`
+      `app=${this.dummyPodName()}`
     );
     return rPods.body.items;
   }
@@ -62,7 +65,8 @@ export class Rotator {
     return resp.body.items;
   }
   async genDummyPod() {
-    const name = this.name + '-' + Math.floor(Math.random() * 1000000);
+    const name =
+      this.dummyPodName() + '-' + Math.floor(Math.random() * 1000000);
     await this.k8sApi.createNamespacedPod(this.namespace, {
       apiVersion: 'v1',
       kind: 'Pod',
@@ -70,7 +74,7 @@ export class Rotator {
         name,
         namespace: this.namespace,
         labels: {
-          app: this.name,
+          app: this.dummyPodName(),
         },
       },
       spec: {
@@ -80,7 +84,7 @@ export class Rotator {
           whenUnsatisfiable: 'DoNotSchedule',
           labelSelector: {
             matchLabels: {
-              app: this.name,
+              app: this.dummyPodName(),
             }
           },
         }],*/
@@ -93,7 +97,7 @@ export class Rotator {
                     {
                       key: 'app',
                       operator: 'In',
-                      values: [this.name],
+                      values: [this.dummyPodName()],
                     },
                   ],
                 },
