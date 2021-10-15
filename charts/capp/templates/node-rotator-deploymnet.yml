@@ -20,3 +20,10 @@ spec:
       containers:
       - name: rotator
         image: {{ .Values.nodeRotator.image.repository }}:{{ .Values.nodeRotator.image.tag }}
+        env:
+        - name: TARGET_NODE_SELECTOR
+          value: {{ .Values.nodeRotator.targetNodeSelector }}
+        - name: IN_CLUSTER
+          value: true
+        - name: REPLICAS
+          value: {{ .Values.nodeRotator.replicas }}
