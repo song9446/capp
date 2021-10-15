@@ -3,6 +3,16 @@ entries:
   capp:
   - apiVersion: v2
     appVersion: 0.0.1
+    created: "2021-10-15T02:27:09.838794244Z"
+    description: A Helm chart for Kubernetes
+    digest: f1a46a4702cdea1c3e29bef7ce3332c836829073fa1ccdd4e472ab301c28305a
+    name: capp
+    type: application
+    urls:
+    - https://github.com/song9446/capp/releases/download/capp-0.0.4/capp-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 0.0.1
     created: "2021-10-15T01:59:02.319906983Z"
     description: A Helm chart for Kubernetes
     digest: 0243aa215ead5141450f88e542ebda86e04cb8b4e5abd8383319f0b2d7259a2f
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://github.com/song9446/capp/releases/download/capp-0.0.2/capp-0.0.2.tgz
     version: 0.0.2
-generated: "2021-10-15T01:59:02.319914183Z"
+generated: "2021-10-15T02:27:09.840139887Z"
