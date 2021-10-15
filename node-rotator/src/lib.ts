@@ -122,6 +122,16 @@ export class Rotator {
       }
     }
   }
+  async evictPod(name: string, namespace: string) {
+    return await this.k8sApi.createNamespacedPodEviction(name, namespace, {
+      apiVersion: 'policy/v1beta1',
+      kind: 'Eviction',
+      metadata: {
+        name,
+        namespace,
+      },
+    });
+  }
   async drainNode(name: string) {
     const rNode = await this.k8sApi.readNode(name);
     const node = rNode.body;
@@ -142,25 +152,26 @@ export class Rotator {
       .filter(pod => pod.metadata?.name && pod.metadata?.namespace)
       .filter(pod => pod.metadata!.ownerReferences?.[0]?.kind !== 'DaemonSet')
       .filter(pod => pod.metadata!.namespace !== 'kube-system')
-      .map(pod =>
-        this.k8sApi.createNamespacedPodEviction(
-          pod.metadata!.name!,
-          pod.metadata!.namespace!,
-          {
-            apiVersion: 'policy/v1beta1',
-            kind: 'Eviction',
-            metadata: {
-              name: pod.metadata!.name,
-              namespace: pod.metadata!.namespace,
-            },
-          }
-        )
-      );
+      .map(pod => this.evictPod(pod.metadata!.name!, pod.metadata!.namespace!));
     await Promise.all(pEvictions);
   }
   async run() {
     const nodes = await this.getTargetNodes();
     let pods = await this.getDummyPods();
+
+    if (pods.some(pod => pod.status?.phase !== 'Running')) {
+      console.error(
+        'non-running dummy pod is detected(maybe it is scaling up). skip it'
+      );
+      return;
+    }
+
+    if (pods.length > this.replicas) {
+      const pod = pods[0];
+      console.error('too many pods are detected. remove one and skip it');
+      await this.evictPod(pod.metadata!.name!, pod.metadata!.namespace!);
+      return;
+    }
 
     while (pods.length < this.replicas) {
       console.log('create dummy pods..');
@@ -178,12 +189,6 @@ export class Rotator {
           this.intervalSeconds * 1000
       );
     if (rottenNodes.length) {
-      if (pods.some(pod => pod.status?.phase !== 'Running')) {
-        console.error(
-          'non-running dummy pod is detected(maybe it is scaling up). skip it'
-        );
-        return;
-      }
       console.log('create dummy pod to node scaleup..');
       await this.genDummyPod();
       console.log(`drainNode ${rottenNodes[0].metadata!.name}`);
