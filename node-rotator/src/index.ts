@@ -1,6 +1,7 @@
 import {Rotator} from './lib';
 
-const {TARGET_NODE_SELECTOR, IN_CLUSTER, REPLICAS, NAMESPACE} = process.env;
+const {TARGET_NODE_SELECTOR, IN_CLUSTER, REPLICAS, NAMESPACE, NAME} =
+  process.env;
 
 if (TARGET_NODE_SELECTOR === undefined) {
   throw Error('TARGET_NODE_SELECTOR env var must be set');
@@ -19,7 +20,8 @@ const namespace =
       )
       .trim()) ||
   'default';
+const name = NAME;
 
-const r = new Rotator({nodeSelector, inCluster, replicas, namespace});
+const r = new Rotator({nodeSelector, inCluster, replicas, namespace, name});
 
 r.runForever();

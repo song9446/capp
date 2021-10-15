@@ -32,3 +32,5 @@ spec:
           value: "true"
         - name: REPLICAS
           value: {{ .Values.nodeRotator.replicas | quote }}
+        - name: NAME
+          value: {{ .Release.Name }}-node-rotator
