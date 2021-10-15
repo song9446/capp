@@ -26,4 +26,4 @@ spec:
         - name: IN_CLUSTER
           value: "true"
         - name: REPLICAS
-          value: {{ .Values.nodeRotator.replicas | quota }}
+          value: {{ .Values.nodeRotator.replicas | quote }}
