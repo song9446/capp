@@ -13,7 +13,7 @@ const nodeSelector = Object.fromEntries([TARGET_NODE_SELECTOR?.split('=')]);
 const inCluster = IN_CLUSTER;
 const replicas = parseInt(REPLICAS) || undefined;
 const namespace = NAMESPACE || 
-  require('fs').readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace') || 
+  require('fs', 'utf8').readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/namespace') || 
   'default';
 
 
