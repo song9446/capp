@@ -6,6 +6,8 @@ imagePullSecrets: []
 
 nodeRotator:
   replicas: 1
+  serviceAccount:
+    create: true
   targetNodeSelector: ''
   image:
     repository: song9446/node-rotator
