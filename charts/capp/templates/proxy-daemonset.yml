@@ -16,6 +16,9 @@ spec:
       {{- if .Values.proxy.nodeSelector }}
       nodeSelector: {{ .Values.proxy.nodeSelector | toJson }}
       {{- end }}
+      {{- if .Values.proxy.tolerations }}
+      telerations: {{ .Values.proxy.tolerations | toJson }}
+      {{- end }}
       containers:
       - name: glider
         image: {{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag }}

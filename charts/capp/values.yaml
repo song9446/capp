@@ -5,15 +5,16 @@
 imagePullSecrets: []
 
 nodeRotator:
+  targetTolerations: []
+  targetNodeSelector: {}
   replicas: 1
   serviceAccount:
     create: true
     name: 
-  targetNodeSelector: ''
   image:
     repository: song9446/node-rotator
     pullPolicy: IfNotPresent
-    tag: "0.0.7"
+    tag: "0.0.8"
   service:
     type: ClusterIP
     port: 8443
@@ -47,6 +48,7 @@ nodeRotator:
 
 
 proxy:
+  tolerations:
   image:
     repository: nadoo/glider
     pullPolicy: IfNotPresent

@@ -1,3 +1,11 @@
+{{- define "serialize-node-selector" -}}
+{{- $local := dict "first" true -}}
+{{- range $k, $v := . -}}{{- if not $local.first -}},{{- end -}}{{- $k -}}={{- $v -}}{{- $_ := set $local "first" false -}}{{- end -}}
+{{- end -}}
+{{- define "serialize-tolerations" -}}
+{{- $local := dict "first" true -}}
+{{- range $k, $v := . -}}{{- if not $local.first -}},{{- end -}}{{- $v.key -}}={{- $v.value -}}{{- $_ := set $local "first" false -}}{{- end -}}
+{{- end -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,11 +34,17 @@ spec:
       - name: rotator
         image: {{ .Values.nodeRotator.image.repository }}:{{ .Values.nodeRotator.image.tag }}
         env:
+        {{- if .Values.nodeRotator.targetNodeSelector }}
         - name: TARGET_NODE_SELECTOR
-          value: {{ .Values.nodeRotator.targetNodeSelector | quote }}
+          value: {{ include "serialize-node-selector" .Values.nodeRotator.targetNodeSelector }}
+        {{- end }}
         - name: IN_CLUSTER
           value: "true"
         - name: REPLICAS
           value: {{ .Values.nodeRotator.replicas | quote }}
         - name: NAME
           value: {{ .Release.Name }}-node-rotator
+        {{- if .Values.nodeRotator.targetTolerations }}
+        - name: TOLERATIONS
+          value: {{ include "serialize-tolerations" .Values.nodeRotator.targetTolerations }}
+        {{- end }}

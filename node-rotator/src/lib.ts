@@ -2,7 +2,8 @@ import * as k8s from '@kubernetes/client-node';
 import {sleep} from './util';
 
 export interface Options {
-  nodeSelector?: string;
+  nodeSelector?: Record<string, string>;
+  tolerations?: Record<string, string>;
   inCluster?: boolean;
   intervalSeconds?: number;
   replicas?: number;
@@ -13,6 +14,7 @@ export interface Options {
 export class Rotator {
   k8sApi: k8s.CoreV1Api;
   nodeSelector: Record<string, string>;
+  tolerations: Record<string, string>;
   intervalSeconds: number;
   replicas: number;
   name: string;
@@ -21,6 +23,7 @@ export class Rotator {
   constructor(options: Options) {
     const {
       nodeSelector = {},
+      tolerations = {},
       inCluster = false,
       intervalSeconds = 7200,
       replicas = 1,
@@ -36,6 +39,7 @@ export class Rotator {
     this.replicas = replicas;
     this.name = name;
     this.namespace = namespace;
+    this.tolerations = tolerations;
     this.exit = false;
   }
   dummyPodName(): string {
@@ -78,16 +82,11 @@ export class Rotator {
         },
       },
       spec: {
-        /*topologySpreadConstraints: [{
-          maxSkew: 1,
-          topologyKey: 'kubernetes.io/hostname',
-          whenUnsatisfiable: 'DoNotSchedule',
-          labelSelector: {
-            matchLabels: {
-              app: this.dummyPodName(),
-            }
-          },
-        }],*/
+        tolerations: Object.entries(this.tolerations).map(kv => ({
+          key: kv[0],
+          value: kv[1],
+          effect: 'NoSchedule',
+        })),
         affinity: {
           podAntiAffinity: {
             requiredDuringSchedulingIgnoredDuringExecution: [
