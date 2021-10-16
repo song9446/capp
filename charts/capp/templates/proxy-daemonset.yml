@@ -17,7 +17,7 @@ spec:
       nodeSelector: {{ .Values.proxy.nodeSelector | toJson }}
       {{- end }}
       {{- if .Values.proxy.tolerations }}
-      telerations: {{ .Values.proxy.tolerations | toJson }}
+      tolerations: {{ .Values.proxy.tolerations | toJson }}
       {{- end }}
       containers:
       - name: glider

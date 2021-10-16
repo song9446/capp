@@ -2,11 +2,11 @@ import {Rotator} from './lib';
 
 const {
   TARGET_NODE_SELECTOR,
+  TARGET_TOLERATIONS,
   IN_CLUSTER,
   REPLICAS,
   NAMESPACE,
   NAME,
-  TOLERATIONS,
 } = process.env;
 
 if (TARGET_NODE_SELECTOR === undefined) {
@@ -17,7 +17,7 @@ const nodeSelector = Object.fromEntries(
   TARGET_NODE_SELECTOR?.split(',')?.map(s => s.split('=')) || []
 );
 const tolerations = Object.fromEntries(
-  TOLERATIONS?.split(',')?.map(s => s.split('=')) || []
+  TARGET_TOLERATIONS?.split(',')?.map(s => s.split('=')) || []
 );
 const inCluster = IN_CLUSTER ? true : false;
 const replicas = Number(REPLICAS) || undefined;

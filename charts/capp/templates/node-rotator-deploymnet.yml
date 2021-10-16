@@ -45,6 +45,6 @@ spec:
         - name: NAME
           value: {{ .Release.Name }}-node-rotator
         {{- if .Values.nodeRotator.targetTolerations }}
-        - name: TOLERATIONS
+        - name: TARGET_TOLERATIONS
           value: {{ include "serialize-tolerations" .Values.nodeRotator.targetTolerations }}
         {{- end }}
