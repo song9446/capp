@@ -3,6 +3,7 @@ import {Rotator} from './lib';
 const {
   TARGET_NODE_SELECTOR,
   TARGET_TOLERATIONS,
+  ROTATION_INTERVAL_SECONDS,
   IN_CLUSTER,
   REPLICAS,
   NAMESPACE,
@@ -32,12 +33,14 @@ const namespace =
       .trim()) ||
   'default';
 const name = NAME;
+const intervalSeconds = Number(ROTATION_INTERVAL_SECONDS) || 7200;
 
 const r = new Rotator({
   nodeSelector,
   inCluster,
   replicas,
   namespace,
+  intervalSeconds,
   name,
   tolerations,
 });
